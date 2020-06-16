@@ -1,0 +1,27 @@
+# action 3
+import pandas as pd
+# 导入数据并处理
+result = pd.read_csv('car_complain.csv')
+#print(result)
+result = result.drop('problem', 1).join(result.problem.str.get_dummies(','))
+#result.to_excel('data1.xlsx')
+#tags = result.columns[7:]
+#print(tags)
+# 统计各品牌/车型+品牌投诉量
+df= result.groupby(['brand'])['id'].agg(['count'])
+print(df)
+df2= result.groupby(['car_model','brand'])['id'].agg(['count'])
+#print(df2)
+df2.reset_index(inplace=True)
+#print(df2)
+# 统计各品牌包含车型数量
+df3= df2.groupby(['brand'])['car_model'].agg(['count'])
+print(df3)
+# 连接表格并计算各品牌每个车型的平均投诉量
+df4= df.merge(df3,left_index=True,right_index=True,how='left')
+print(df4)
+df4['average']=df4['count_x']/df4['count_y']
+print(df4)
+# 进行逆向排序
+df4=df4.sort_values('average',ascending=False)
+print(df4)

@@ -1,0 +1,29 @@
+# action 2
+import numpy as np
+# 建立数据结构及数据内容
+persontype = np.dtype({'names':['name','chinese','math','english','total'],'formats':['S32','i','i','i','i']})
+peoples = np.array([("ZhangFei",68,65,30,0),("GuanYu",95,76,98,0),("LiuBei",98,86,88,0),("DianWei",90,88,77,0),("XuChu",80,90,90,0)],dtype=persontype)
+name = peoples[:]['name']
+chinese = peoples[:]['chinese']
+math = peoples[:]['math']
+english = peoples[:]['english']
+peoples[:]['total']=chinese+english+math
+total = peoples[:]['total']
+#定义结果显示函数
+def show(name,cj):
+    print('{}|{}|{}|{}|{}|{}'.format(name,np.mean(cj),np.min(cj),np.max(cj),np.var(cj),np.std(cj)))
+#显示各科目统计结果
+print("科目|平均成绩|最小成绩|最大成绩|方差|标准差")
+show("语文",chinese)
+show("英语",english)
+show("数学",math)
+show("总成绩",total)
+print('\n')
+
+print("总成绩排序如下:\n")
+
+id = 1
+df = sorted(peoples, key=lambda peoples:peoples[4], reverse=True)  
+
+for i in range(len(df)):
+    print("排名: {} 姓名: {} 总成绩: {} ".format(i+1, df[i][0], df[i][4]))
