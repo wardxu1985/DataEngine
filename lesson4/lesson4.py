@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 
 
+
 dataset = pd.read_csv(r'/Users/wardxu/Documents/GitHub/DataEngine/lesson4/Market_Basket_Optimisation.csv', header = None)
 pd.set_option('display.max_columns', None)
 
@@ -25,6 +26,7 @@ def rule1():
 
 
 
+
 def encode_units(x):
     if x <= 0:
         return 0
@@ -41,7 +43,7 @@ def rule2():
 
     a = data.reset_index()
     #更新index
-    # print(a)
+    print(a)
 
     b = a.groupby(['level_0', 0])[0].count().unstack().fillna(0)
     #使用原订单序号与商品名称进行表格展开
@@ -50,7 +52,7 @@ def rule2():
     itemsets = b.applymap(encode_units)
     #表格中数据转换成0/1
 
-    # print(itemsets)
+    print(itemsets)
 
     frequent_itemsets = apriori(itemsets, min_support=0.02, use_colnames=True)
 
