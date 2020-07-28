@@ -61,38 +61,38 @@ user_agent_list = [
         "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10"]
 headers = {'User-Agent': random.choice(user_agent_list)}
 data = pd.DataFrame()
-for i in range(1, 4):
-    url = rurl + str(i)
+for i in range(1, 4):       #翻页
+    url = rurl + str(i)     #爬取网页地址
     print(url)
     r = requests.get(url, headers=headers)
     r.encoding = 'utf-8'
     content = r.text
     soup = BeautifulSoup(content, "html.parser")
     # print(soup)
-    divs = soup.find_all('div', class_='search-result-list-item')
+    divs = soup.find_all('div', class_='search-result-list-item')       #查找所有class=，的div
     # print(divs)
     table = pd.DataFrame()
     for div in divs:
-        car = div.find('p', class_='cx-name text-hover')
+        car = div.find('p', class_='cx-name text-hover')        #获取车名文本
         # print(car.get_text())
-        money = div.find('p', class_='cx-price')
-        a = div.find('img')
-        picture = a.get('src')
+        money = div.find('p', class_='cx-price')                #获取价格文本
+        a = div.find('img')                                     #在div里面查找img项目
+        picture = a.get('src')                                  #获取img 的src地址
         # print(picture)
-        list_ = [car.get_text(), money.get_text(), picture]
-        list_ = pd.DataFrame(list_)
-        table = pd.concat([table, list_.T], ignore_index=True, sort=False)
+        list_ = [car.get_text(), money.get_text(), picture]     #三个文本组成列表
+        list_ = pd.DataFrame(list_)                             #列表转换dataframe
+        table = pd.concat([table, list_.T], ignore_index=True, sort=False)      #在保存数据表格中添加单个div中信息
         # print(table)
-    data = pd.concat([data, table], ignore_index=True, sort=False)
+    data = pd.concat([data, table], ignore_index=True, sort=False)              #在保存数据表格中添加单页数据
     # print(data)
 
 
-data.columns = ['car', 'money', 'picture']
-data = data.drop('money', axis=1).join(data['money'].str.split('-', expand=True))
-data.columns = ['car', 'picture', 'min', 'max']
-data['min'] = data['min'].str.extract(r'(\d+)', expand=False)
-data['max'] = data['max'].str.extract(r'(\d+)', expand=False)
+data.columns = ['car', 'money', 'picture']           #列命名
+data = data.drop('money', axis=1).join(data['money'].str.split('-', expand=True))       #使用符号-拆分money列，并删除原money列
+data.columns = ['car', 'picture', 'min', 'max']         #重命名列名
+data['min'] = data['min'].str.extract(r'(\d+.?\d)', expand=False)       #产出文本，保留数字，使用正则表达式
+data['max'] = data['max'].str.extract(r'(\d+.?\d)', expand=False)
 # print(data)
-writer = pd.ExcelWriter('project1.xlsx')
+writer = pd.ExcelWriter('project1.xlsx')                #dataframe保存excel
 data.to_excel(writer)
 writer.close()

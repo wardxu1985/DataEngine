@@ -8,7 +8,7 @@ df = pd.read_csv(r'/Users/wardxu/Documents/GitHub/DataEngine/项目/project2/订
 # print(df)
 # df = df.set_index('订单日期')
 # print(df)
-df = df.groupby(['客户ID', '订单日期', '产品名称'])['产品名称'].count().unstack().fillna(0)
+df = df.groupby(['客户ID', '订单日期', '产品名称'])['产品名称'].count().unstack().fillna(0)       #使用一个用户一次购买的产品进行展开
 # print(df)
 
 def encode_units(x):
