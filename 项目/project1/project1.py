@@ -77,7 +77,7 @@ for i in range(1, 4):       #翻页
         # print(car.get_text())
         money = div.find('p', class_='cx-price')                #获取价格文本
         a = div.find('img')                                     #在div里面查找img项目
-        picture = a.get('src')                                  #获取img 的src地址
+        picture = 'http:' + a.get('src')                                  #获取img 的src地址
         # print(picture)
         list_ = [car.get_text(), money.get_text(), picture]     #三个文本组成列表
         list_ = pd.DataFrame(list_)                             #列表转换dataframe
@@ -89,9 +89,9 @@ for i in range(1, 4):       #翻页
 
 data.columns = ['car', 'money', 'picture']           #列命名
 data = data.drop('money', axis=1).join(data['money'].str.split('-', expand=True))       #使用符号-拆分money列，并删除原money列
-data.columns = ['car', 'picture', 'min', 'max']         #重命名列名
-data['min'] = data['min'].str.extract(r'(\d+.?\d)', expand=False)       #产出文本，保留数字，使用正则表达式
-data['max'] = data['max'].str.extract(r'(\d+.?\d)', expand=False)
+data.columns = ['car', 'picture', 'min(万元)', 'max(万元)']         #重命名列名
+data['min(万元)'] = data['min(万元)'].str.extract(r'(\d+.?\d)', expand=False).fillna('暂无')       #产出文本，保留数字，使用正则表达式
+data['max(万元)'] = data['max(万元)'].str.extract(r'(\d+.?\d)', expand=False).fillna('暂无')
 # print(data)
 writer = pd.ExcelWriter('project1.xlsx')                #dataframe保存excel
 data.to_excel(writer)
