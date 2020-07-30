@@ -25,8 +25,8 @@ min_max_scaler = preprocessing.MinMaxScaler(feature_range=(0, 1), copy=True)
 train_x = min_max_scaler.fit_transform(train_x)
 
 
-# print(pd.DataFrame(train_x).head(3))
-#
+print(pd.DataFrame(train_x).head(3))
+
 # pca = sklearnPCA(n_components=2)
 # transformed = pd.DataFrame(pca.fit_transform(train_x))
 #
@@ -57,4 +57,13 @@ result.rename({0: u'聚类结果'}, axis=1, inplace=True)
 # print(result.sort_values(by='聚类结果', ascending=False))
 result = result.drop('CarName', axis=1).join(result['CarName'].str.split(' ', expand=True)[0].rename('company')).join(result['CarName'].str.split(' ', expand=True)[1].rename('car'))
 print(result.sort_values(by='聚类结果', ascending=False))
+
+
+
+for i in range(1, 15):
+    list_1 = result[result['聚类结果'] == i]
+    ll = list_1['company'].values.tolist()
+    if 'volkswagen' in ll:
+        print("与volkswagen为竞品的车辆：")
+        print(list_1)
 
