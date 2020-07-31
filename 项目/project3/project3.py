@@ -4,6 +4,7 @@ from sklearn import preprocessing
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA as sklearnPCA
 from sklearn.metrics import silhouette_score
+from mpl_toolkits.mplot3d import Axes3D
 
 pd.set_option('display.max_rows', None)
 
@@ -32,7 +33,7 @@ print(pd.DataFrame(train_x).head(3))
 def Pca(train_x):
     pca = sklearnPCA(n_components=2)        #pca降维参数：2维
     transformed = pd.DataFrame(pca.fit_transform(train_x))  #对数据组进行降维并转换成DateFrame
-
+    # print(transformed)
     fig = plt.figure()                          #制图
     ax = fig.add_subplot(1, 1, 1)
     ax.scatter(transformed[0], transformed[1])
@@ -90,3 +91,30 @@ for i in range(1, 15):
         print("与volkswagen为竞品的车辆：")
         print(list_1)
 
+"""使用pca降维绘制2D图，并按颜色分组"""
+def Pca_fig2D():
+    pca = sklearnPCA(n_components=2)        #pca降维参数：2维
+    transformed = pd.DataFrame(pca.fit_transform(train_x))  #对数据组进行降维并转换成DateFrame
+    result1 = pd.concat((transformed, pd.DataFrame(predict_y)), axis=1)
+    result1.columns = ['0', '1', '2']
+    # print(result1)
+    # print(result1['0'], result1['1'])
+    fig = plt.figure()                          #制图
+    ax = fig.add_subplot(1, 1, 1)
+    ax.scatter(result1['0'], result1['1'], c=result1['2'])      #根据分组显示颜色
+    plt.show()
+
+"""使用pca降维绘制3D图，并按颜色分组"""
+def Pca_fig3D():
+    pca = sklearnPCA(n_components=3)  # pca降维参数：3维
+    transformed = pd.DataFrame(pca.fit_transform(train_x))  # 对数据组进行降维并转换成DateFrame
+    result1 = pd.concat((transformed, pd.DataFrame(predict_y)), axis=1)
+    result1.columns = ['0', '1', '2', '3']
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(xs=result1['0'], ys=result1['1'], zs=result1['2'], c=result1['3'])
+    plt.show()
+
+
+Pca_fig2D()
+Pca_fig3D()
