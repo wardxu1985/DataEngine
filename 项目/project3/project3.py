@@ -42,11 +42,11 @@ def Pca(train_x):
 """使用sse簇内误方差 手肘法 确定分组系数K"""
 def Sse(train_x):
     sse = []
-    for k in range(1, 30):
+    for k in range(1, 60):
         kmeans = KMeans(n_clusters=k)
         kmeans.fit(train_x)
         sse.append(kmeans.inertia_)
-    x = range(1, 30)
+    x = range(1, 60)
     plt.xlabel('K')
     plt.ylabel('SSE')
     plt.plot(x, sse, 'o-')
@@ -68,9 +68,9 @@ def Si(train_x):
 
 
 
-# Pca(train_x)
-# Sse(train_x)
-# Si(train_x)
+Pca(train_x)
+Sse(train_x)
+Si(train_x)
 
 
 kmeans = KMeans(n_clusters=15)              #通过手肘与轮廓系统确定k=15
